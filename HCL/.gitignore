@@ -1,0 +1,7 @@
+__pycache__/
+.env
+ffhq256.pt
+places256.pt
+samples/
+data/
+assets/

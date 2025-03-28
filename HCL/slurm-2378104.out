@@ -1,0 +1,35 @@
+/home/mz1231/.conda/envs/cosjp/lib/python3.10/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Distributed init (rank 0)
+[rank0]:[W327 21:45:20.515507407 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+2025-03-27 21:45:20,491 - INFO - Device: cuda
+2025-03-27 21:45:20,491 - INFO - Number of devices: 1
+2025-03-27 21:45:21,935 - INFO - Size of test set: 58
+2025-03-27 21:45:23,110 - INFO - Successfully load inpaintnet from places256.pt
+2025-03-27 21:45:23,140 - INFO - Successfully load refinenet from places256.pt
+2025-03-27 21:45:23,140 - INFO - Successfully load classifier from places256.pt
+2025-03-27 21:45:23,163 - INFO - Start evaluating...
+2025-03-27 21:45:23,164 - WARNING - Size of test set <= n_eval, ignore n_eval
+2025-03-27 21:45:23,164 - INFO - Batch size per device: 3
+2025-03-27 21:45:23,164 - INFO - Effective batch size: 3
+/home/mz1231/.conda/envs/cosjp/lib/python3.10/site-packages/torch/utils/data/dataloader.py:624: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(
+Evaluating:   0%|                                                                                | 0/20 [00:00<?, ?it/s]Evaluating:   5%|███▌                                                                    | 1/20 [00:05<01:53,  5.96s/it]Evaluating:  10%|███████▏                                                                | 2/20 [00:06<00:47,  2.63s/it]Evaluating:  15%|██████████▊                                                             | 3/20 [00:06<00:26,  1.56s/it]Evaluating:  20%|██████████████▍                                                         | 4/20 [00:06<00:16,  1.06s/it]Evaluating:  25%|██████████████████                                                      | 5/20 [00:07<00:11,  1.28it/s]Evaluating:  30%|█████████████████████▌                                                  | 6/20 [00:07<00:08,  1.63it/s]Evaluating:  35%|█████████████████████████▏                                              | 7/20 [00:07<00:06,  1.97it/s]Evaluating:  40%|████████████████████████████▊                                           | 8/20 [00:07<00:05,  2.29it/s]Evaluating:  45%|████████████████████████████████▍                                       | 9/20 [00:08<00:04,  2.56it/s]Evaluating:  50%|███████████████████████████████████▌                                   | 10/20 [00:08<00:03,  2.79it/s]Evaluating:  55%|███████████████████████████████████████                                | 11/20 [00:08<00:03,  2.96it/s]Evaluating:  60%|██████████████████████████████████████████▌                            | 12/20 [00:09<00:02,  3.11it/s]Evaluating:  65%|██████████████████████████████████████████████▏                        | 13/20 [00:09<00:02,  3.23it/s]Evaluating:  70%|█████████████████████████████████████████████████▋                     | 14/20 [00:09<00:01,  3.32it/s]Evaluating:  75%|█████████████████████████████████████████████████████▎                 | 15/20 [00:09<00:01,  3.38it/s]Evaluating:  80%|████████████████████████████████████████████████████████▊              | 16/20 [00:10<00:01,  3.42it/s]Evaluating:  85%|████████████████████████████████████████████████████████████▎          | 17/20 [00:10<00:00,  3.46it/s]Evaluating:  90%|███████████████████████████████████████████████████████████████▉       | 18/20 [00:10<00:00,  3.48it/s]Evaluating:  95%|███████████████████████████████████████████████████████████████████▍   | 19/20 [00:11<00:00,  3.50it/s]Evaluating: 100%|███████████████████████████████████████████████████████████████████████| 20/20 [00:15<00:00,  1.52s/it]Evaluating: 100%|███████████████████████████████████████████████████████████████████████| 20/20 [00:15<00:00,  1.28it/s]
+2025-03-27 21:45:39,463 - INFO - lpips: 0.025101618841290474
+2025-03-27 21:45:39,463 - INFO - psnr: 33.50798416137695
+2025-03-27 21:45:39,463 - INFO - ssim: 0.9704678058624268
+2025-03-27 21:45:42,066 - INFO - fid: 17.681013107299805
+2025-03-27 21:45:42,074 - INFO - stage0-acc: 0.9763625264167786
+2025-03-27 21:45:42,074 - INFO - stage0-bce: 0.07782907783985138
+2025-03-27 21:45:42,074 - INFO - stage0-f1: 0.9867724180221558
+2025-03-27 21:45:42,074 - INFO - stage0-iou: 0.9740118384361267
+2025-03-27 21:45:42,080 - INFO - stage1-acc: 0.9782612323760986
+2025-03-27 21:45:42,080 - INFO - stage1-bce: 0.0982317179441452
+2025-03-27 21:45:42,080 - INFO - stage1-f1: 0.9877667427062988
+2025-03-27 21:45:42,080 - INFO - stage1-iou: 0.9760236144065857
+2025-03-27 21:45:42,087 - INFO - stage2-acc: 0.9760744571685791
+2025-03-27 21:45:42,087 - INFO - stage2-bce: 0.4193791449069977
+2025-03-27 21:45:42,087 - INFO - stage2-f1: 0.9864529371261597
+2025-03-27 21:45:42,087 - INFO - stage2-iou: 0.9733795523643494
+2025-03-27 21:45:42,087 - INFO - End of evaluation
+[rank0]:[W327 21:45:42.578963934 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
