@@ -1,0 +1,13 @@
+/home/mz1231/.conda/envs/cosjp/lib/python3.10/site-packages/timm/models/layers/__init__.py:48: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+2025-04-01 20:01:21,148 - INFO - Device: cuda
+2025-04-01 20:01:21,148 - INFO - Number of devices: 1
+2025-04-01 20:01:21,149 - INFO - Size of test set: 6
+2025-04-01 20:01:22,813 - INFO - Loaded inpaintnet from ./places256.pt
+2025-04-01 20:01:22,875 - INFO - Loaded refinenet from ./places256.pt
+2025-04-01 20:01:22,875 - INFO - Loaded classifier from ./places256.pt
+2025-04-01 20:01:22,879 - INFO - Start sampling...
+Not using distributed mode
+Sampling:   0%|                                                                                   | 0/6 [00:00<?, ?it/s]Sampling:  17%|████████████▌                                                              | 1/6 [00:04<00:21,  4.37s/it]Sampling:  33%|█████████████████████████                                                  | 2/6 [00:04<00:07,  1.90s/it]Sampling:  50%|█████████████████████████████████████▌                                     | 3/6 [00:04<00:03,  1.11s/it]Sampling:  67%|██████████████████████████████████████████████████                         | 4/6 [00:04<00:01,  1.36it/s]Sampling:  83%|██████████████████████████████████████████████████████████████▌            | 5/6 [00:05<00:00,  1.88it/s]Sampling: 100%|███████████████████████████████████████████████████████████████████████████| 6/6 [00:05<00:00,  2.41it/s]Sampling: 100%|███████████████████████████████████████████████████████████████████████████| 6/6 [00:05<00:00,  1.15it/s]
+2025-04-01 20:01:28,113 - INFO - Sampled images are saved to ./samples/v2/places256/
+2025-04-01 20:01:28,113 - INFO - End of sampling

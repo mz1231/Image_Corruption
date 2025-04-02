@@ -1,7 +1,7 @@
 import argparse
 from yacs.config import CfgNode as CN
 
-from engine import CustomTester as Tester
+from engine import CustomTester
 
 
 def get_parser():
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         from engine.tester_downstream import DownstreamTester
         tester = DownstreamTester(args, cfg)
     else:
-        tester = Tester(args, cfg)
+        tester = CustomTester(args, cfg)
 
     if args.mode == 'evaluate':
         tester.evaluate()
