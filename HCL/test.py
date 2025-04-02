@@ -1,7 +1,7 @@
 import argparse
 from yacs.config import CfgNode as CN
 
-from engine import CustomTester as Tester
+from engine import Tester
 
 
 def get_parser():

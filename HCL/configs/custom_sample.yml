@@ -4,7 +4,7 @@ seed: 3407
 data:
   name: Places365-small
   # dataroot: /data/xuyifeng/data/Places365/
-  dataroot: ./data/custom/
+  dataroot: ./data/Places365/
   img_size: 256
   gt_available: False          # or False
   masks_available: False      # or True if you have them
@@ -91,10 +91,10 @@ train:
 
 
 test:
-  pretrained: ./places256.pt
+  pretrained: ./pretrained/places256.pt
   # evaluate
   n_eval: 3000
   # sample
-  n_samples: 6
+  n_samples: 100
   random: False
-  save_dir: ./samples/v2/places256/
+  save_dir: ./samples/no_corruption/places256/

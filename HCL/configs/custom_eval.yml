@@ -6,10 +6,12 @@ data:
   # dataroot: /data/xuyifeng/data/Places365/
   dataroot: ./data/Places365/
   img_size: 256
-
+  gt_available: False          # or False
+  masks_available: False      # or True if you have them
 
 mask:
   mask_type: dir  # 'center', 'rectangles', 'brushes' or 'dir'
+  # dir_path: /data/xuyifeng/data/NVIDIAIrregularMaskDataset/train/
   dir_path: ./data/NVIDIAIrregularMaskDataset/test/
   dir_invert_color: true
   noise_type: real  # 'constant', 'random_noise', 'random_single_color', 'real'

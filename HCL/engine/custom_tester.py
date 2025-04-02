@@ -64,52 +64,125 @@ class CustomTester:
             self.classifier.load_state_dict(ckpt['classifier'])
             self.logger.info(f"Loaded classifier from {model_path}")
 
+    # @torch.no_grad()
+    # def evaluate(self):
+    #     self.logger.info('Start evaluating...')
+    #     cfg = self.cfg.test
+
+    #     test_set = self.test_set
+    #     if cfg.n_eval is not None:
+    #         if cfg.n_eval < len(self.test_set):
+    #             test_set = Subset(self.test_set, torch.arange(cfg.n_eval))
+    #             self.logger.info(f"Use a subset of test set, {cfg.n_eval}/{len(self.test_set)}")
+    #         else:
+    #             self.logger.warning(f'Size of test set <= n_eval, ignore n_eval')
+
+    #     micro_batch = self.cfg.dataloader.micro_batch
+    #     if micro_batch == 0:
+    #         micro_batch = self.cfg.dataloader.batch_size
+    #     test_loader = get_dataloader(test_set, batch_size=micro_batch, **self.cfg.dataloader)
+
+    #     metric_image = MetricCollection({
+    #         'psnr': PeakSignalNoiseRatio(data_range=1, dim=(1, 2, 3)),
+    #         'ssim': StructuralSimilarityIndexMeasure(data_range=1),
+    #         'lpips': LearnedPerceptualImagePatchSimilarity(normalize=True)
+    #     }).to(self.device)
+    #     metric_fid = FrechetInceptionDistance().to(self.device)
+
+    #     pbar = tqdm.tqdm(test_loader, desc='Evaluating', ncols=120, disable=not is_main_process())
+    #     for batch in pbar:
+    #         if len(batch) == 1:
+    #             X = gt_img = noise = batch[0]
+    #             mask = torch.zeros_like(X[:, 0:1])
+    #         elif len(batch) == 2:
+    #             X, gt_img = batch
+    #             noise = X
+    #             mask = torch.zeros_like(X[:, 0:1])
+    #         else:
+    #             X, gt_img, noise, mask = batch
+
+    #         X, gt_img, mask = X.to(self.device), gt_img.to(self.device), mask.to(self.device)
+    #         recX, _, conf_mask_hier = self.inpaintnet(X, classifier=self.classifier)
+    #         pred_mask = F.interpolate(conf_mask_hier['pred_masks'][0].float(), X.shape[-2:])
+    #         refX = self.refinenet(recX, pred_mask)
+
+    #         metric_image.update((refX + 1) / 2, (gt_img + 1) / 2)
+    #         metric_fid.update(((refX + 1) / 2 * 255).to(torch.uint8), real=False)
+    #         metric_fid.update(((gt_img + 1) / 2 * 255).to(torch.uint8), real=True)
+    #     pbar.close()
+
+    #     for k, v in metric_image.compute().items():
+    #         self.logger.info(f'{k}: {v.mean()}')
+    #     self.logger.info(f'fid: {metric_fid.compute()}')
+    #     self.logger.info('End of evaluation')
+
     @torch.no_grad()
     def evaluate(self):
         self.logger.info('Start evaluating...')
         cfg = self.cfg.test
 
         test_set = self.test_set
-        if cfg.n_eval and cfg.n_eval < len(test_set):
-            test_set = Subset(test_set, torch.arange(cfg.n_eval))
+        if cfg.n_eval is not None:
+            if cfg.n_eval < len(self.test_set):
+                test_set = Subset(self.test_set, torch.arange(cfg.n_eval))
+                self.logger.info(f"Use a subset of test set, {cfg.n_eval}/{len(self.test_set)}")
+            else:
+                self.logger.warning(f'Size of test set <= n_eval, ignore n_eval')
 
-        micro_batch = self.cfg.dataloader.micro_batch or self.cfg.dataloader.batch_size
-        test_loader = get_dataloader(test_set, batch_size=micro_batch, **self.cfg.dataloader)
+        micro_batch = self.cfg.dataloader.micro_batch
+        if micro_batch == 0:
+            micro_batch = self.cfg.dataloader.batch_size
+        self.logger.info(f'Batch size per device: {micro_batch}')
+        self.logger.info(f'Effective batch size: {micro_batch * get_world_size()}')
+        test_loader = get_dataloader(
+            dataset=test_set,
+            shuffle=False,
+            drop_last=False,
+            batch_size=micro_batch,
+            num_workers=self.cfg.dataloader.num_workers,
+            pin_memory=self.cfg.dataloader.pin_memory,
+            prefetch_factor=self.cfg.dataloader.prefetch_factor,
+        )
 
-        metric_image = MetricCollection({
-            'psnr': PeakSignalNoiseRatio(data_range=1, dim=(1, 2, 3)),
-            'ssim': StructuralSimilarityIndexMeasure(data_range=1),
-            'lpips': LearnedPerceptualImagePatchSimilarity(normalize=True)
-        }).to(self.device)
+        metric_mask = [MetricCollection(
+            dict(bce=BinaryCrossEntropy(),
+                 acc=BinaryAccuracy(multidim_average='samplewise'),
+                 f1=BinaryF1Score(multidim_average='samplewise'),
+                 iou=IntersectionOverUnion())
+        ).to(self.device) for _ in range(self.n_stages)]
+        # These metrics expect images to be in [0, 1]
+        metric_image = MetricCollection(
+            dict(psnr=PeakSignalNoiseRatio(data_range=1, dim=(1, 2, 3)),
+                 ssim=StructuralSimilarityIndexMeasure(data_range=1),
+                 lpips=LearnedPerceptualImagePatchSimilarity(normalize=True))
+        ).to(self.device)
+        # FID metric expect images to be in [0, 255] and type uint8
         metric_fid = FrechetInceptionDistance().to(self.device)
 
         pbar = tqdm.tqdm(test_loader, desc='Evaluating', ncols=120, disable=not is_main_process())
-        for batch in pbar:
-            if len(batch) == 1:
-                X = gt_img = noise = batch[0]
-                mask = torch.zeros_like(X[:, 0:1])
-            elif len(batch) == 2:
-                X, gt_img = batch
-                noise = X
-                mask = torch.zeros_like(X[:, 0:1])
-            else:
-                X, gt_img, noise, mask = batch
-
-            X, gt_img, mask = X.to(self.device), gt_img.to(self.device), mask.to(self.device)
-            recX, _, conf_mask_hier = self.inpaintnet(X, classifier=self.classifier)
+        for X, gt_img, noise, mask in pbar:
+            X = X.to(device=self.device, dtype=torch.float32)
+            gt_img = gt_img.to(device=self.device, dtype=torch.float32)
+            mask = mask.to(device=self.device, dtype=torch.float32)
+            recX, projs, conf_mask_hier = self.inpaintnet(X, classifier=self.classifier)
             pred_mask = F.interpolate(conf_mask_hier['pred_masks'][0].float(), X.shape[-2:])
             refX = self.refinenet(recX, pred_mask)
-
+            for st in range(self.n_stages):
+                acc_conf = F.interpolate(conf_mask_hier['acc_confs'][st], size=mask.shape[-2:])
+                metric_mask[st].update(acc_conf, mask.long())
             metric_image.update((refX + 1) / 2, (gt_img + 1) / 2)
-            metric_fid.update(((refX + 1) / 2 * 255).to(torch.uint8), real=False)
-            metric_fid.update(((gt_img + 1) / 2 * 255).to(torch.uint8), real=True)
+            metric_fid.update(((refX + 1) / 2 * 255).to(dtype=torch.uint8), real=False)
+            metric_fid.update(((gt_img + 1) / 2 * 255).to(dtype=torch.uint8), real=True)
         pbar.close()
 
         for k, v in metric_image.compute().items():
             self.logger.info(f'{k}: {v.mean()}')
         self.logger.info(f'fid: {metric_fid.compute()}')
+        for st in range(self.n_stages):
+            for k, v in metric_mask[st].compute().items():
+                self.logger.info(f'stage{st}-{k}: {v.mean().item()}')
         self.logger.info('End of evaluation')
-
+        
     @main_process_only
     @torch.no_grad()
     def sample(self):

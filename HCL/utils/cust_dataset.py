@@ -9,7 +9,7 @@ from utils.logger import get_logger
 from utils.dist import is_dist_avail_and_initialized
 
 def load_custom_dataset(cfg):
-    corrupted_dir = os.path.join(cfg.data.dataroot, "corrupted")
+    corrupted_dir = os.path.join(cfg.data.dataroot, "test_256")
     gt_dir = os.path.join(cfg.data.dataroot, "gt") if cfg.data.get("gt_available", False) else None
     mask_dir = os.path.join(cfg.data.dataroot, "masks") if cfg.data.get("masks_available", False) else None
 

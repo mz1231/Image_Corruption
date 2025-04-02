@@ -16,4 +16,4 @@ conda activate cosjp
 
 export TORCH_HOME=/scratch/network/mz1231/pretrained
 
-python test.py sample -c configs/places256.yml
+python test.py /scratch/network/mz1231/image_corruption/HCL/sample -c /scratch/network/mz1231/image_corruption/HCL/configs/places256.yml
