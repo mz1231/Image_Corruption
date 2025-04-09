@@ -64,58 +64,6 @@ class CustomTester:
             self.classifier.load_state_dict(ckpt['classifier'])
             self.logger.info(f"Loaded classifier from {model_path}")
 
-    # @torch.no_grad()
-    # def evaluate(self):
-    #     self.logger.info('Start evaluating...')
-    #     cfg = self.cfg.test
-
-    #     test_set = self.test_set
-    #     if cfg.n_eval is not None:
-    #         if cfg.n_eval < len(self.test_set):
-    #             test_set = Subset(self.test_set, torch.arange(cfg.n_eval))
-    #             self.logger.info(f"Use a subset of test set, {cfg.n_eval}/{len(self.test_set)}")
-    #         else:
-    #             self.logger.warning(f'Size of test set <= n_eval, ignore n_eval')
-
-    #     micro_batch = self.cfg.dataloader.micro_batch
-    #     if micro_batch == 0:
-    #         micro_batch = self.cfg.dataloader.batch_size
-    #     test_loader = get_dataloader(test_set, batch_size=micro_batch, **self.cfg.dataloader)
-
-    #     metric_image = MetricCollection({
-    #         'psnr': PeakSignalNoiseRatio(data_range=1, dim=(1, 2, 3)),
-    #         'ssim': StructuralSimilarityIndexMeasure(data_range=1),
-    #         'lpips': LearnedPerceptualImagePatchSimilarity(normalize=True)
-    #     }).to(self.device)
-    #     metric_fid = FrechetInceptionDistance().to(self.device)
-
-    #     pbar = tqdm.tqdm(test_loader, desc='Evaluating', ncols=120, disable=not is_main_process())
-    #     for batch in pbar:
-    #         if len(batch) == 1:
-    #             X = gt_img = noise = batch[0]
-    #             mask = torch.zeros_like(X[:, 0:1])
-    #         elif len(batch) == 2:
-    #             X, gt_img = batch
-    #             noise = X
-    #             mask = torch.zeros_like(X[:, 0:1])
-    #         else:
-    #             X, gt_img, noise, mask = batch
-
-    #         X, gt_img, mask = X.to(self.device), gt_img.to(self.device), mask.to(self.device)
-    #         recX, _, conf_mask_hier = self.inpaintnet(X, classifier=self.classifier)
-    #         pred_mask = F.interpolate(conf_mask_hier['pred_masks'][0].float(), X.shape[-2:])
-    #         refX = self.refinenet(recX, pred_mask)
-
-    #         metric_image.update((refX + 1) / 2, (gt_img + 1) / 2)
-    #         metric_fid.update(((refX + 1) / 2 * 255).to(torch.uint8), real=False)
-    #         metric_fid.update(((gt_img + 1) / 2 * 255).to(torch.uint8), real=True)
-    #     pbar.close()
-
-    #     for k, v in metric_image.compute().items():
-    #         self.logger.info(f'{k}: {v.mean()}')
-    #     self.logger.info(f'fid: {metric_fid.compute()}')
-    #     self.logger.info('End of evaluation')
-
     @torch.no_grad()
     def evaluate(self):
         self.logger.info('Start evaluating...')

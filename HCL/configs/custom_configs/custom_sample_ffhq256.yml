@@ -2,17 +2,20 @@ seed: 3407
 
 
 data:
-  name: Places365-small
-  dataroot: ./data/Places365/
+  name: FFHQ
+  dataroot: ./data/ffhq/images1024x1024
   img_size: 256
 
 
 mask:
-  mask_type: dir  # 'center', 'rectangles', 'brushes' or 'dir'
+  mask_type: dir
   dir_path: ./data/NVIDIAIrregularMaskDataset/test/
   dir_invert_color: true
-  noise_type: real  # 'constant', 'random_noise', 'random_single_color', 'real'
+  noise_type: real
   real_dataset:
+    - name: CelebA-HQ
+      dataroot: ./data/CelebA-HQ/
+      img_size: 256
     - name: ImageNet
       dataroot: ./data/ImageNet/
       img_size: 256
@@ -28,26 +31,24 @@ dataloader:
 
 
 inpaintnet:
-  dim: 64
+  dim: 32
   n_conv_stages: 0
   dim_mults: [1, 2, 4]
-  proj_dim: 128
+  proj_dim: 64
   encoder_depths: [6, 4, 2]
   decoder_depths: [2, 2, 2]
   window_size: 8
-  bottleneck_window_size: 16
+  bottleneck_window_size: 8
   bottleneck_depth: 2
   conf_threshs: [1.0, 0.95, 0.95]
   temperature: 0.1
   fuse: true
   kmeans_n_iters: 3
   kmeans_repeat: 3
-  legacy_v: 2
 
 refinenet:
   dim: 64
   dim_mults: [1, 2, 4, 8, 8]
-  legacy_v: 2
 
 
 contrast:
@@ -87,10 +88,10 @@ train:
 
 
 test:
-  pretrained: ./pretrained/places256.pt
+  pretrained: ./pretrained/ffhq256.pt
   # evaluate
   n_eval: 3000
   # sample
-  n_samples: 20
+  n_samples: 100
   random: False
-  save_dir: ./samples/v2/places256/
+  save_dir: ./samples/no_corruption/ffhq/

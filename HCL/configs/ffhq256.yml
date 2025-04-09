@@ -3,21 +3,21 @@ seed: 3407
 
 data:
   name: FFHQ
-  dataroot: /data/FFHQ/
+  dataroot: ./data/ffhq/
   img_size: 256
 
 
 mask:
   mask_type: dir
-  dir_path: /data/NVIDIAIrregularMaskDataset/train/
+  dir_path: ./data/NVIDIAIrregularMaskDataset/test/
   dir_invert_color: true
   noise_type: real
   real_dataset:
     - name: CelebA-HQ
-      dataroot: /data/CelebA-HQ/
+      dataroot: ./data/CelebA-HQ/
       img_size: 256
     - name: ImageNet
-      dataroot: /data/ImageNet/
+      dataroot: ./data/ImageNet/
       img_size: 256
   smooth_radius: 3
 
@@ -88,10 +88,10 @@ train:
 
 
 test:
-  pretrained: ~
+  pretrained: ./pretrained/ffhq256.pt
   # evaluate
   n_eval: 3000
   # sample
-  n_samples: 20
+  n_samples: 100
   random: False
   save_dir: ./samples/ffhq256/

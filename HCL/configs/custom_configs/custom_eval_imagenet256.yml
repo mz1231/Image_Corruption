@@ -2,19 +2,20 @@ seed: 3407
 
 
 data:
-  name: Places365-small
-  dataroot: ./data/Places365/
+  name: ImageNet
+  dataroot: ./data/ImageNet
   img_size: 256
-
+  gt_available: False          # or False
+  masks_available: False      # or True if you have them
 
 mask:
-  mask_type: dir  # 'center', 'rectangles', 'brushes' or 'dir'
+  mask_type: dir 
   dir_path: ./data/NVIDIAIrregularMaskDataset/test/
   dir_invert_color: true
-  noise_type: real  # 'constant', 'random_noise', 'random_single_color', 'real'
+  noise_type: real 
   real_dataset:
-    - name: ImageNet
-      dataroot: ./data/ImageNet/
+    - name: Places365-small
+      dataroot: ./data/Places365/
       img_size: 256
   smooth_radius: 3
 
@@ -51,7 +52,6 @@ refinenet:
 
 
 contrast:
-  start_stage: 0
   sample_num: 512
   temperature: 0.1
   valid_thresh: 1.0
@@ -71,12 +71,12 @@ train:
   pretrained: ~
   resume: ~
 
-  lambda_contrast: 0.01
+  lambda_contrast: 0.001
   lambda_rec: 1.0
   lambda_rec_refined: 1.0
   lambda_perc: 0.05
   lambda_perc_refined: 0.1
-  lambda_adv_refined: 0
+  lambda_adv_refined: 1.0
   perc_use_features: [relu2_2, relu3_2, relu4_2]
   perc_use_features_refined: [relu2_2, relu3_2, relu4_2]
 
@@ -87,10 +87,10 @@ train:
 
 
 test:
-  pretrained: ./pretrained/places256.pt
+  pretrained: ./pretrained/imagenet256.pt
   # evaluate
   n_eval: 3000
   # sample
   n_samples: 20
   random: False
-  save_dir: ./samples/v2/places256/
+  save_dir: ./samples/v2/imagenet256/

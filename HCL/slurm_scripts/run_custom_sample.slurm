@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1               # total number of tasks across all nodes
 #SBATCH --mem=80GB
 #SBATCH --gres=gpu:1             # number of gpus per node
-#SBATCH --time=00:30:00          # total run time limit (HH:MM:SS)
+#SBATCH --time=00:02:00          # total run time limit (HH:MM:SS)
 #SBATCH --mail-type=begin        # send email when job begins
 #SBATCH --mail-type=end          # send email when job ends
 #SBATCH --mail-type=fail         # send email if job fails
@@ -16,4 +16,4 @@ conda activate cosjp
 
 export TORCH_HOME=/scratch/network/mz1231/pretrained
 
-python /scratch/network/mz1231/image_corruption/HCL/custom_test.py sample -c /scratch/network/mz1231/image_corruption/HCL/configs/custom_sample.yml
+python /scratch/network/mz1231/image_corruption/HCL/custom_test.py sample -c /scratch/network/mz1231/image_corruption/HCL/configs/custom_sample_ffhq.yml
