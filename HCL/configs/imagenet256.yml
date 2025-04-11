@@ -3,7 +3,7 @@ seed: 3407
 
 data:
   name: ImageNet
-  dataroot: ./data/ImageNet
+  dataroot: ./data/imageNetTest
   img_size: 256
 
 
@@ -92,4 +92,4 @@ test:
   # sample
   n_samples: 20
   random: False
-  save_dir: ./samples/v2/imagenet256/
+  save_dir: ./samples/imagenet256/

@@ -3,7 +3,7 @@ seed: 3407
 
 data:
   name: ImageNet
-  dataroot: ./data/ImageNet
+  dataroot: ./data/imageNetTest
   img_size: 256
   gt_available: False          # or False
   masks_available: False      # or True if you have them

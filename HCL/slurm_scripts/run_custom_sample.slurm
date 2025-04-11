@@ -16,4 +16,4 @@ conda activate cosjp
 
 export TORCH_HOME=/scratch/network/mz1231/pretrained
 
-python /scratch/network/mz1231/image_corruption/HCL/custom_test.py sample -c /scratch/network/mz1231/image_corruption/HCL/configs/custom_sample_ffhq.yml
+python /scratch/network/mz1231/image_corruption/HCL/custom_test.py sample -c /scratch/network/mz1231/image_corruption/HCL/configs/custom_configs/custom_sample_imagenet256.yml
