@@ -3,10 +3,11 @@ seed: 3407
 
 data:
   name: ImageNet
-  dataroot: ./data/imageNetTest
+  dataroot: ./data/snow/1
   img_size: 256
-  gt_available: False          # or False
+  gt_available: True          # or False
   masks_available: False      # or True if you have them
+  gt_dir: ./data/ImageNetGT
 
 
 mask:
@@ -94,4 +95,4 @@ test:
   # sample
   n_samples: 20
   random: False
-  save_dir: ./samples/no_corruption/imagenet256/
+  save_dir: ./samples/imagenet-c/imagenet256/snow-1

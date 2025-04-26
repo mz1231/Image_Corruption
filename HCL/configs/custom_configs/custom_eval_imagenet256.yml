@@ -3,10 +3,12 @@ seed: 3407
 
 data:
   name: ImageNet
-  dataroot: ./data/imageNetTest
+  dataroot: ./data/snow/1
   img_size: 256
-  gt_available: False          # or False
+  gt_available: True          # or False
   masks_available: False      # or True if you have them
+  gt_dir: ./data/ImageNetGT
+
 
 mask:
   mask_type: dir 

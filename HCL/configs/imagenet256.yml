@@ -6,7 +6,6 @@ data:
   dataroot: ./data/imageNetTest
   img_size: 256
 
-
 mask:
   mask_type: dir 
   dir_path: ./data/NVIDIAIrregularMaskDataset/test/
@@ -90,6 +89,6 @@ test:
   # evaluate
   n_eval: 3000
   # sample
-  n_samples: 20
+  n_samples: 100
   random: False
   save_dir: ./samples/imagenet256/
